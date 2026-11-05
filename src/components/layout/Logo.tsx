@@ -1,8 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { banglaDate } from "@/lib/format";
+import TodayDate from "../TodayDate";
 
 export default function Logo() {
   return (
@@ -11,10 +9,8 @@ export default function Logo() {
         <Image src="/logo-icon.png" alt="" width={22} height={22} priority className="brightness-0 invert" />
       </span>
       <span className="leading-tight">
-        <span className="block text-xl font-bold text-brand">বাজার দর</span>
-        <span className="block text-xs text-muted" suppressHydrationWarning>
-          {banglaDate()}
-        </span>
+        <span className="block text-xl font-bold text-ink">বাজার দর</span>
+        <TodayDate className="block text-xs text-muted" />
       </span>
     </Link>
   );
