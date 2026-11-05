@@ -9,7 +9,7 @@ const BASE_URLS = [
 async function request<T>(path: string): Promise<T | null> {
   for (const base of BASE_URLS) {
     try {
-      const res = await fetch(`${base}${path}`, { next: { revalidate: 3600 } });
+      const res = await fetch(`${base}${path}`, { cache: "no-store" });
       if (res.status === 404) return null;
       if (res.ok) return (await res.json()) as T;
     } catch {}
