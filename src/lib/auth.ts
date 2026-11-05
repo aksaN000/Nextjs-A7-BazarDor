@@ -4,7 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 import { MongoClient } from "mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017");
-const db = client.db("bazardor");
+export const db = client.db("bazardor");
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
