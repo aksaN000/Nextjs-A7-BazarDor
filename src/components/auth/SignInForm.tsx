@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { signIn } from "@/lib/auth-client";
+import { authErrorMessage } from "@/lib/auth-errors";
 import PasswordField from "./PasswordField";
 import SocialButtons from "./SocialButtons";
 
@@ -33,7 +34,7 @@ export default function SignInForm() {
     setLoading(false);
 
     if (error) {
-      toast.error(error.message ?? "ইমেইল বা পাসওয়ার্ড সঠিক নয়");
+      toast.error(authErrorMessage(error, "সাইন ইন করা যায়নি, আবার চেষ্টা করুন"));
       return;
     }
 

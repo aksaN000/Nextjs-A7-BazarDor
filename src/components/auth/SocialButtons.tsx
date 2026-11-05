@@ -16,7 +16,7 @@ export default function SocialButtons({ callbackURL = "/" }: { callbackURL?: str
     setLoading(provider);
     const { error } = await signIn.social({ provider, callbackURL });
     if (error) {
-      toast.error(error.message ?? "সোশ্যাল লগইন করা যায়নি");
+      toast.error("সোশ্যাল লগইন করা যায়নি, আবার চেষ্টা করুন");
       setLoading(null);
     }
   };

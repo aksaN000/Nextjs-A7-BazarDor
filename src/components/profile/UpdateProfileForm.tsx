@@ -24,7 +24,7 @@ export default function UpdateProfileForm({ currentName }: { currentName: string
     setLoading(false);
 
     if (error) {
-      toast.error(error.message ?? "তথ্য আপডেট করা যায়নি");
+      toast.error("তথ্য আপডেট করা যায়নি, আবার চেষ্টা করুন");
       return;
     }
 
