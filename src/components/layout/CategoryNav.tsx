@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FiGrid } from "react-icons/fi";
 import type { Category } from "@/lib/types";
 
 export default function CategoryNav({ categories }: { categories: Category[] }) {
   const pathname = usePathname();
 
   const links = [
-    { href: "/", label: "সব পণ্য", icon: "🛒" },
+    { href: "/", label: "সব পণ্য", icon: <FiGrid /> },
     ...categories.map((category) => ({
       href: `/category/${category.slug}`,
       label: category.nameBn,
