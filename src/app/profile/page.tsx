@@ -4,11 +4,18 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FiEdit2 } from "react-icons/fi";
+import SetPasswordForm from "@/components/profile/SetPasswordForm";
 import SignOutButton from "@/components/profile/SignOutButton";
 import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "আমার প্রোফাইল | বাজার দর",
+};
+
+const PROVIDER_NAMES: Record<string, string> = {
+  credential: "ইমেইল ও পাসওয়ার্ড",
+  google: "Google",
+  github: "GitHub",
 };
 
 function InfoRow({ label, value }: { label: string; value: string }) {
@@ -26,6 +33,10 @@ export default async function ProfilePage() {
 
   const { user } = session;
   const joined = new Intl.DateTimeFormat("bn-BD", { dateStyle: "long" }).format(new Date(user.createdAt));
+  const accounts = await auth.api.listUserAccounts({ headers: await headers() });
+  const providers = accounts.map((account) => account.providerId);
+  const hasPassword = providers.includes("credential");
+  const loginMethods = providers.map((id) => PROVIDER_NAMES[id] ?? id).join(", ");
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
@@ -51,6 +62,7 @@ export default async function ProfilePage() {
         <InfoRow label="নাম" value={user.name} />
         <InfoRow label="ইমেইল" value={user.email} />
         <InfoRow label="অ্যাকাউন্ট তৈরি" value={joined} />
+        <InfoRow label="সাইন ইন পদ্ধতি" value={loginMethods} />
         <Link
           href="/profile/update"
           className={`${buttonVariants({ variant: "primary", fullWidth: true })} mt-4 bg-brand-dark`}
@@ -58,6 +70,17 @@ export default async function ProfilePage() {
           <FiEdit2 /> আপডেট
         </Link>
       </div>
+
+      {!hasPassword && (
+        <div className="mt-4 rounded-2xl border border-line bg-white p-5">
+          <h2 className="font-semibold">পাসওয়ার্ড সেট করুন</h2>
+          <p className="mb-4 mt-1 text-sm text-muted">
+            আপনি এখন {loginMethods} দিয়ে সাইন ইন করছেন। একটি পাসওয়ার্ড সেট করলে ইমেইল ও পাসওয়ার্ড দিয়েও
+            ঢুকতে পারবেন।
+          </p>
+          <SetPasswordForm />
+        </div>
+      )}
     </div>
   );
 }
