@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# বাজার দর (BazarDor)
 
-## Getting Started
+BazarDor is a Bangla web app for checking today's prices of daily essentials in Bangladesh. It shows the prices of rice, lentils, oil, vegetables, fish, meat, eggs, milk and spices, how much they changed since yesterday, and a market by market comparison across all divisions. Detailed prices are available after signing in.
 
-First, run the development server:
+Live site: https://nextjs-a7-bazardor.vercel.app
+
+## Technologies Used
+
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- HeroUI v3
+- BetterAuth (email/password, Google, GitHub)
+- MongoDB (BetterAuth MongoDB adapter)
+- react-hot-toast
+- react-icons
+- Vercel for deployment
+
+## Features
+
+1. Home page with a price ticker, top 6 products whose prices went up today, top 6 whose prices went down, and all 33 products in a responsive grid. All numbers are shown in Bengali digits.
+2. Category pages for each product group with a sort option (default, price low to high, price high to low). Sorting uses the numeric price, not the Bengali text.
+3. Protected product details page with minimum, maximum and average price, the cheapest and the most expensive market, and a table of today's price in 12 markets.
+4. Sign up and sign in with email and password, or continue with Google or GitHub, using BetterAuth. Toast messages are shown for every success and error.
+5. Routes are protected with Next.js proxy. Visitors who open a product or profile page without signing in are sent to the sign in page with a message.
+6. My Profile page with the user's information, and a separate update page to change the name using BetterAuth `updateUser`.
+7. Skeleton loaders while data is loading, a custom 404 page, and a layout that works on mobile, tablet and desktop.
+
+## Running Locally
+
+1. Install packages:
+
+```bash
+npm install
+```
+
+2. Copy `.env.example` to `.env.local` and fill in the values:
+
+```
+MONGODB_URI=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
+
+3. Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000 in the browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/` home page
+- `/category/[slug]` products of one category
+- `/product/[slug]` product details (sign in required)
+- `/signin` and `/signup`
+- `/profile` and `/profile/update` (sign in required)
 
-## Learn More
+## API
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Product data comes from the BazarDor API: https://openapi.programming-hero.com/api/bazardor
