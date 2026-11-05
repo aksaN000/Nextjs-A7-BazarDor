@@ -9,13 +9,20 @@ type Props = {
   label: string;
   placeholder: string;
   validate?: (value: string) => string | null;
+  onChange?: (value: string) => void;
 };
 
-export default function PasswordField({ name, label, placeholder, validate }: Props) {
+export default function PasswordField({ name, label, placeholder, validate, onChange }: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <TextField isRequired name={name} type={visible ? "text" : "password"} validate={validate}>
+    <TextField
+      isRequired
+      name={name}
+      type={visible ? "text" : "password"}
+      validate={validate}
+      onChange={onChange}
+    >
       <Label>{label}</Label>
       <div className="relative">
         <Input className="w-full pr-10" placeholder={placeholder} />
