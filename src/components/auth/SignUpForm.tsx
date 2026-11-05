@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { signUp } from "@/lib/auth-client";
+import { authErrorMessage } from "@/lib/auth-errors";
 import PasswordField from "./PasswordField";
 import SocialButtons from "./SocialButtons";
 
 export default function SignUpForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ export default function SignUpForm() {
     setLoading(false);
 
     if (error) {
-      toast.error(error.message ?? "অ্যাকাউন্ট তৈরি করা যায়নি");
+      toast.error(authErrorMessage(error, "অ্যাকাউন্ট তৈরি করা যায়নি, আবার চেষ্টা করুন"));
       return;
     }
 
@@ -57,15 +57,9 @@ export default function SignUpForm() {
           name="password"
           label="পাসওয়ার্ড"
           placeholder="কমপক্ষে ৮ অক্ষর"
-          onChange={setPassword}
           validate={(value) => (value.length < 8 ? "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে" : null)}
         />
-        <PasswordField
-          name="confirmPassword"
-          label="পাসওয়ার্ড নিশ্চিত করুন"
-          placeholder="আবার লিখুন"
-          validate={(value) => (value && value !== password ? "পাসওয়ার্ড মিলছে না" : null)}
-        />
+        <PasswordField name="confirmPassword" label="পাসওয়ার্ড নিশ্চিত করুন" placeholder="আবার লিখুন" />
         <Button type="submit" fullWidth isPending={loading} className="bg-brand-dark">
           অ্যাকাউন্ট তৈরি করুন
         </Button>
