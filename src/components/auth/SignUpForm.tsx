@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { signUp } from "@/lib/auth-client";
-import { authErrorHint, authErrorMessage } from "@/lib/auth-errors";
+import { lookupAccount } from "@/lib/account-lookup";
+import { authErrorMessage, type Hint, signUpHint } from "@/lib/auth-errors";
 import FormHint from "./FormHint";
 import PasswordField from "./PasswordField";
 import SocialButtons from "./SocialButtons";
@@ -14,7 +15,7 @@ import SocialButtons from "./SocialButtons";
 export default function SignUpForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [hint, setHint] = useState<string | null>(null);
+  const [hint, setHint] = useState<Hint | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,12 +32,21 @@ export default function SignUpForm() {
 
     setLoading(true);
     setHint(null);
+
+    const existing = await lookupAccount(email);
+    if (existing.exists) {
+      const accountHint = signUpHint(existing);
+      setLoading(false);
+      toast.error(accountHint.title);
+      setHint(accountHint);
+      return;
+    }
+
     const { error } = await signUp.email({ name, email, password: pass });
     setLoading(false);
 
     if (error) {
       toast.error(authErrorMessage(error, "অ্যাকাউন্ট তৈরি করা যায়নি, আবার চেষ্টা করুন"));
-      setHint(authErrorHint(error));
       return;
     }
 
@@ -64,13 +74,7 @@ export default function SignUpForm() {
           validate={(value) => (value.length < 8 ? "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে" : null)}
         />
         <PasswordField name="confirmPassword" label="পাসওয়ার্ড নিশ্চিত করুন" placeholder="আবার লিখুন" />
-        {hint && (
-          <FormHint
-            title="এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট আছে"
-            message={hint}
-            link={{ href: "/signin", label: "সাইন ইন পাতায় যান" }}
-          />
-        )}
+        {hint && <FormHint title={hint.title} message={hint.message} link={hint.link} />}
         <Button type="submit" fullWidth isPending={loading} className="bg-brand-dark">
           অ্যাকাউন্ট তৈরি করুন
         </Button>
