@@ -26,13 +26,13 @@ export default function SortedProducts({ products }: { products: Product[] }) {
     <>
       <div className="mb-4 flex items-center justify-end rounded-2xl border border-line bg-white px-4 py-3">
         <Select
-          className="flex items-center gap-3"
+          className="!flex-row items-center gap-3"
           value={sortBy}
           onChange={(value) => setSortBy((value as Key) ?? "default")}
           aria-label="সাজান"
         >
-          <Label className="text-sm text-muted">সাজান</Label>
-          <Select.Trigger className="min-w-48">
+          <Label className="shrink-0 text-sm text-muted">সাজান</Label>
+          <Select.Trigger className="min-w-44 sm:min-w-52">
             <Select.Value />
             <Select.Indicator />
           </Select.Trigger>
