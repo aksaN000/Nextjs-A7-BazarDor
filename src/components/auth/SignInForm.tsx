@@ -6,7 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { signIn } from "@/lib/auth-client";
-import { authErrorMessage } from "@/lib/auth-errors";
+import { authErrorHint, authErrorMessage } from "@/lib/auth-errors";
+import FormHint from "./FormHint";
 import PasswordField from "./PasswordField";
 import SocialButtons from "./SocialButtons";
 
@@ -16,6 +17,7 @@ export default function SignInForm() {
   const redirect = searchParams.get("redirect");
   const callbackURL = redirect?.startsWith("/") ? redirect : "/";
   const [loading, setLoading] = useState(false);
+  const [hint, setHint] = useState<string | null>(null);
 
   useEffect(() => {
     if (redirect) {
@@ -30,11 +32,13 @@ export default function SignInForm() {
     const password = String(formData.get("password"));
 
     setLoading(true);
+    setHint(null);
     const { error } = await signIn.email({ email, password });
     setLoading(false);
 
     if (error) {
       toast.error(authErrorMessage(error, "সাইন ইন করা যায়নি, আবার চেষ্টা করুন"));
+      setHint(authErrorHint(error));
       return;
     }
 
@@ -52,6 +56,7 @@ export default function SignInForm() {
           <FieldError />
         </TextField>
         <PasswordField name="password" label="পাসওয়ার্ড" placeholder="কমপক্ষে ৮ অক্ষর" />
+        {hint && <FormHint title="ইমেইল বা পাসওয়ার্ড সঠিক নয়" message={hint} />}
         <Button type="submit" fullWidth isPending={loading} className="bg-brand-dark">
           সাইন ইন
         </Button>
