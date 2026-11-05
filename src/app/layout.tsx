@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Hind_Siliguri } from "next/font/google";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import ToastProvider from "@/components/layout/ToastProvider";
 import "./globals.css";
 
 const hind = Hind_Siliguri({
@@ -17,7 +20,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="bn" className={`light ${hind.variable} h-full antialiased`} data-theme="light">
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <ToastProvider />
       </body>
     </html>
   );
