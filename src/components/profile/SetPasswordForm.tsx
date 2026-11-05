@@ -4,6 +4,7 @@ import { Button, Form } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { FiCheckCircle } from "react-icons/fi";
 import { setPasswordAction } from "@/app/profile/actions";
 import PasswordField from "@/components/auth/PasswordField";
 import { authErrorMessage } from "@/lib/auth-errors";
@@ -11,6 +12,7 @@ import { authErrorMessage } from "@/lib/auth-errors";
 export default function SetPasswordForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,9 +34,19 @@ export default function SetPasswordForm() {
       return;
     }
 
-    toast.success("পাসওয়ার্ড সেট হয়েছে, এখন ইমেইল দিয়েও সাইন ইন করতে পারবেন");
+    toast.success("পাসওয়ার্ড সেট হয়েছে");
+    setDone(true);
     router.refresh();
   };
+
+  if (done) {
+    return (
+      <p className="flex items-center gap-2 rounded-xl bg-brand-soft p-3 text-sm font-medium text-brand-dark">
+        <FiCheckCircle className="size-4 shrink-0" />
+        পাসওয়ার্ড সেট হয়েছে। এখন থেকে ইমেইল ও পাসওয়ার্ড দিয়েও সাইন ইন করতে পারবেন।
+      </p>
+    );
+  }
 
   return (
     <Form className="flex flex-col gap-4" onSubmit={handleSubmit}>
