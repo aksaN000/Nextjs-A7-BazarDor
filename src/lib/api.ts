@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import type { Category, Product } from "./types";
 
 const BASE_URLS = [
@@ -12,7 +13,9 @@ async function request<T>(path: string): Promise<T | null> {
       const res = await fetch(`${base}${path}`, { cache: "no-store" });
       if (res.status === 404) return null;
       if (res.ok) return (await res.json()) as T;
-    } catch {}
+    } catch (error) {
+      unstable_rethrow(error);
+    }
   }
   throw new Error("Could not load data from the BazarDor API");
 }

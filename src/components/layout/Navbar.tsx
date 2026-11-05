@@ -5,10 +5,7 @@ import Logo from "./Logo";
 import PriceTicker from "./PriceTicker";
 
 export default async function Navbar() {
-  const [categories, products] = await Promise.all([
-    getCategories().catch(() => []),
-    getProducts().catch(() => []),
-  ]);
+  const [categories, products] = await Promise.all([getCategories(), getProducts()]);
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur">
